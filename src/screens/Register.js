@@ -8,9 +8,28 @@ export default function Register({ navigation }) {
   const [phone, setPhone] = useState('');
 
   const handleRegister = () => {
-    // Lógica de registro
-    navigation.navigate('Main');
+    fetch('http://172.30.1.101:3000/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ nombre, email, telefono, password }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Registro exitoso');
+          navigation.navigate('Login'); 
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error al registrar:', error);
+        alert('Error al registrar el usuario');
+      });
   };
+  
 
   return (
     <View style={styles.container}>

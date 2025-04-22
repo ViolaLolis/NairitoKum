@@ -5,10 +5,27 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    // Aquí iría la lógica de autenticación
-    navigation.navigate('Main');
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('http://172.30.1.101:3000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      const data = await response.json();
+  
+      if (data.success) {
+        navigation.navigate('Main');
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      alert('Hubo un error. Intenta de nuevo.');
+    }
   };
+  
 
   return (
     <View style={styles.container}>
