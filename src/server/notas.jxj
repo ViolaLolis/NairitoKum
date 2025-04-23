@@ -1,3 +1,0 @@
-npm init -y
-instalar las dependencias para que el proyecto funcione npm install expo
-npm install express mysql cors body-parser

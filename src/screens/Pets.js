@@ -1,20 +1,37 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import PetCard from '../Componentes/PetCard';
 
 export default function Pets({ navigation }) {
-  const pets = [
-    { id: 1, name: 'Max', type: 'Perro', breed: 'Labrador', age: 3, image: require('../assets/perro.png') },
-    { id: 2, name: 'Luna', type: 'Gato', breed: 'Siamés', age: 2, image: require('../assets/gato.png') },
-  ];
+  const [pets, setPets] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchPets = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('http://192.168.1.7:3000/pets');
+      const data = await response.json();
+      setPets(data);
+    } catch (error) {
+      console.error('Error al obtener mascotas:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', fetchPets);
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Mis Mascotas</Text>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.addButton}
-          onPress={() => navigation.navigate('AddPet')}
+          onPress={() => navigation.navigate('AddEditPet')}
+
         >
           <Text style={styles.addButtonText}>+</Text>
         </TouchableOpacity>
@@ -24,11 +41,14 @@ export default function Pets({ navigation }) {
         data={pets}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <PetCard 
-            pet={item} 
+          <PetCard
+            pet={item}
             onPress={() => navigation.navigate('PetDetail', { pet: item })}
           />
         )}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={fetchPets} />
+        }
         contentContainerStyle={styles.list}
       />
     </View>

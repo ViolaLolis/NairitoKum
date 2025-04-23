@@ -8,12 +8,12 @@ export default function Register({ navigation }) {
   const [phone, setPhone] = useState('');
 
   const handleRegister = () => {
-    fetch('http://172.30.1.101:3000/register', {
+    fetch('http://192.168.1.7:3000/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ nombre, email, telefono, password }),
+      body: JSON.stringify({ nombre: name, email, telefono: phone, password }),
     })
       .then(response => response.json())
       .then(data => {
@@ -29,7 +29,6 @@ export default function Register({ navigation }) {
         alert('Error al registrar el usuario');
       });
   };
-  
 
   return (
     <View style={styles.container}>

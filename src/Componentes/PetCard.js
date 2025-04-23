@@ -1,52 +1,54 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
-const PetCard = ({ pet, onPress }) => {
+export default function PetCard({ pet, onPress }) {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.card}>
-      <Image source={pet.image} style={styles.image} />
+    <TouchableOpacity style={styles.card} onPress={onPress}>
+      <Image
+        source={require('../assets/perfil.png')} // o pet.image si tienes imágenes dinámicas
+        style={styles.image}
+      />
       <View style={styles.info}>
-        <Text style={styles.name}>{pet.name}</Text>
-        <Text style={styles.detail}>{pet.type} - {pet.breed}</Text>
-        <Text style={styles.detail}>Edad: {pet.age} años</Text>
+        <Text style={styles.name}>{pet.nombre}</Text>
+        <Text style={styles.details}>
+          {pet.especie} • {pet.raza || 'Sin raza'}
+        </Text>
+        <Text style={styles.details}>Edad: {pet.edad} años</Text>
+        <Text style={styles.details}>Peso: {pet.peso} kg</Text>
       </View>
     </TouchableOpacity>
   );
-};
+}
 
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
     borderRadius: 10,
     padding: 15,
     marginBottom: 15,
+    alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 5,
     elevation: 3,
   },
   image: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     marginRight: 15,
   },
   info: {
-    justifyContent: 'center',
+    flex: 1,
   },
   name: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 5,
     color: '#333',
   },
-  detail: {
+  details: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 3,
   },
 });
-
-export default PetCard;

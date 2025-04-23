@@ -18,22 +18,27 @@ export default function PetDetail({ route, navigation }) {
       </View>
 
       <View style={styles.profileSection}>
-        <Image source={pet.image} style={styles.petImage} />
-        <Text style={styles.petName}>{pet.name}</Text>
-        <Text style={styles.petType}>{pet.type} • {pet.breed}</Text>
+        <Image
+          source={pet.image ? pet.image : require('../assets/perfil.png')}
+          style={styles.petImage}
+        />
+        <Text style={styles.petName}>{pet.nombre}</Text>
+        <Text style={styles.petType}>
+          {pet.especie} • {pet.raza || 'Sin raza'}
+        </Text>
       </View>
 
       <View style={styles.infoCard}>
         <View style={styles.infoRow}>
           <Ionicons name="paw" size={20} color="#4A90E2" />
-          <Text style={styles.infoText}>Edad: {pet.age} años</Text>
+          <Text style={styles.infoText}>Edad: {pet.edad} años</Text>
         </View>
-        
+
         <View style={styles.infoRow}>
           <Ionicons name="calendar" size={20} color="#4A90E2" />
           <Text style={styles.infoText}>Última visita: {pet.lastVisit || 'No registrada'}</Text>
         </View>
-        
+
         <View style={styles.infoRow}>
           <Ionicons name="medical" size={20} color="#4A90E2" />
           <Text style={styles.infoText}>Vacunas: {pet.vaccines || 'No registradas'}</Text>
@@ -54,11 +59,13 @@ export default function PetDetail({ route, navigation }) {
         )}
       </View>
 
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.appointmentButton}
         onPress={() => navigation.navigate('Appointments', { pet })}
       >
-        <Text style={styles.appointmentButtonText}>Agendar Cita para {pet.name}</Text>
+        <Text style={styles.appointmentButtonText}>
+          Agendar Cita para {pet.nombre}
+        </Text>
       </TouchableOpacity>
     </ScrollView>
   );

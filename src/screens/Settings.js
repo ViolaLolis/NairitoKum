@@ -1,10 +1,19 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Switch, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Switch, TouchableOpacity, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function Settings({ navigation }) {
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
   const [darkModeEnabled, setDarkModeEnabled] = React.useState(false);
+
+  // Cambiar el tema de la app según el modo oscuro
+  React.useEffect(() => {
+    if (darkModeEnabled) {
+      StatusBar.setBarStyle('light-content'); // Cambiar estilo de barra de estado
+    } else {
+      StatusBar.setBarStyle('dark-content');
+    }
+  }, [darkModeEnabled]);
 
   const settingsOptions = [
     {
@@ -58,8 +67,13 @@ export default function Settings({ navigation }) {
     },
   ];
 
+  // Estilos para el modo claro y oscuro
+  const containerStyle = darkModeEnabled ? styles.containerDark : styles.containerLight;
+  const buttonStyle = darkModeEnabled ? styles.logoutButtonDark : styles.logoutButtonLight;
+  const textColor = darkModeEnabled ? '#fff' : '#000';
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={containerStyle}>
       {settingsOptions.map((option, index) => (
         <TouchableOpacity
           key={index}
@@ -68,29 +82,37 @@ export default function Settings({ navigation }) {
           activeOpacity={option.onPress ? 0.5 : 1}
         >
           <View style={styles.optionLeft}>
-            <Ionicons name={option.icon} size={24} color="#4A90E2" style={styles.optionIcon} />
+            <Ionicons name={option.icon} size={24} color={darkModeEnabled ? '#fff' : '#4A90E2'} style={styles.optionIcon} />
             <View>
-              <Text style={styles.optionTitle}>{option.title}</Text>
-              {option.subtitle && <Text style={styles.optionSubtitle}>{option.subtitle}</Text>}
+              <Text style={[styles.optionTitle, { color: textColor }]}>{option.title}</Text>
+              {option.subtitle && <Text style={[styles.optionSubtitle, { color: textColor }]}>{option.subtitle}</Text>}
             </View>
           </View>
           {option.action}
         </TouchableOpacity>
       ))}
 
-      <TouchableOpacity style={styles.logoutButton}>
-        <Text style={styles.logoutButtonText}>Cerrar Sesión</Text>
+      {/* Botón de Cerrar Sesión */}
+      <TouchableOpacity
+        style={buttonStyle}
+        onPress={() => navigation.replace('Login')} // Redirige a Login al cerrar sesión
+      >
+        <Text style={[styles.logoutButtonText, { color: darkModeEnabled ? '#fff' : '#F44336' }]}>Cerrar Sesión</Text>
       </TouchableOpacity>
 
-      <Text style={styles.versionText}>Versión 1.0.0</Text>
+      <Text style={[styles.versionText, { color: textColor }]}>Versión 1.0.0</Text>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  containerLight: {
     flex: 1,
     backgroundColor: '#f5f5f5',
+  },
+  containerDark: {
+    flex: 1,
+    backgroundColor: '#333',
   },
   option: {
     flexDirection: 'row',
@@ -110,14 +132,12 @@ const styles = StyleSheet.create({
   },
   optionTitle: {
     fontSize: 16,
-    color: '#333',
   },
   optionSubtitle: {
     fontSize: 14,
-    color: '#999',
     marginTop: 3,
   },
-  logoutButton: {
+  logoutButtonLight: {
     marginTop: 30,
     padding: 15,
     backgroundColor: 'white',
@@ -126,14 +146,21 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#eee',
   },
+  logoutButtonDark: {
+    marginTop: 30,
+    padding: 15,
+    backgroundColor: '#444',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: '#555',
+  },
   logoutButtonText: {
-    color: '#F44336',
     fontSize: 16,
     fontWeight: '500',
   },
   versionText: {
     textAlign: 'center',
-    color: '#999',
     marginTop: 20,
     marginBottom: 30,
   },

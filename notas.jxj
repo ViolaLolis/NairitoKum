@@ -1,0 +1,7 @@
+npm init -y
+instalar las dependencias para que el proyecto funcione npm install expo
+npm install express mysql cors body-parser
+npm install -g expo-cli
+npm install
+en servidor linea 44 debemos cambiar la direccion ip, por el computador que vayamos a usar  y lo mismo en login linea 10
+
