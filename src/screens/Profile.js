@@ -3,44 +3,66 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, ScrollView 
 import { Ionicons } from '@expo/vector-icons';
 
 export default function Profile({ navigation }) {
+  // Estado para almacenar la información del usuario
   const [user, setUser] = useState({
     name: 'María González',
     email: 'maria@example.com',
     phone: '555-123-4567',
     address: 'Calle Falsa 123, Ciudad',
   });
+
+  // Estado para controlar si el perfil está en modo de edición
   const [isEditing, setIsEditing] = useState(false);
 
+  // Función para cambiar el estado de edición
   const handleEdit = () => {
     setIsEditing(!isEditing);
   };
 
+  // Función para guardar los cambios del perfil (actualmente solo cambia el estado de edición)
   const handleSave = () => {
     setIsEditing(false);
-    // Aquí iría la lógica para guardar los cambios en el backend
+    // Aquí iría la lógica real para enviar los datos actualizados al backend
+    console.log('Datos guardados:', user);
   };
 
+  // Función para actualizar el estado del usuario cuando cambia un input
   const handleChange = (field, value) => {
     setUser({ ...user, [field]: value });
   };
 
+  // Función para manejar el cierre de sesión y navegar a la pantalla de Login
+  const handleLogout = () => {
+    // Aquí podrías incluir lógica adicional para limpiar tokens de autenticación,
+    // restablecer estados globales de la aplicación relacionados con la sesión, etc.
+    console.log('Cerrando sesión');
+    navigation.navigate('Login');
+  };
+
   return (
     <ScrollView style={styles.container}>
+      {/* Encabezado de la pantalla */}
       <View style={styles.header}>
+        {/* Botón para volver a la pantalla anterior */}
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="#4A90E2" />
         </TouchableOpacity>
+        {/* Título de la pantalla */}
         <Text style={styles.title}>Mi Perfil</Text>
+        {/* Botón para alternar entre editar y guardar el perfil */}
         <TouchableOpacity onPress={isEditing ? handleSave : handleEdit}>
           <Text style={styles.editButton}>{isEditing ? 'Guardar' : 'Editar'}</Text>
         </TouchableOpacity>
       </View>
 
+      {/* Sección de la imagen de perfil */}
       <View style={styles.profileSection}>
-        <Image 
-          source={require('../assets/perfil.png')} 
+        {/* Imagen de perfil */}
+        <Image
+          source={require('../assets/perfil.png')}
           style={styles.profileImage}
         />
+        {/* Botón para cambiar la foto de perfil (solo visible en modo edición) */}
         {isEditing && (
           <TouchableOpacity style={styles.changePhotoButton}>
             <Text style={styles.changePhotoText}>Cambiar foto</Text>
@@ -48,7 +70,9 @@ export default function Profile({ navigation }) {
         )}
       </View>
 
+      {/* Sección de la información del usuario */}
       <View style={styles.infoSection}>
+        {/* Campo Nombre */}
         <Text style={styles.label}>Nombre</Text>
         {isEditing ? (
           <TextInput
@@ -60,6 +84,7 @@ export default function Profile({ navigation }) {
           <Text style={styles.infoText}>{user.name}</Text>
         )}
 
+        {/* Campo Correo electrónico */}
         <Text style={styles.label}>Correo electrónico</Text>
         {isEditing ? (
           <TextInput
@@ -72,6 +97,7 @@ export default function Profile({ navigation }) {
           <Text style={styles.infoText}>{user.email}</Text>
         )}
 
+        {/* Campo Teléfono */}
         <Text style={styles.label}>Teléfono</Text>
         {isEditing ? (
           <TextInput
@@ -84,6 +110,7 @@ export default function Profile({ navigation }) {
           <Text style={styles.infoText}>{user.phone}</Text>
         )}
 
+        {/* Campo Dirección */}
         <Text style={styles.label}>Dirección</Text>
         {isEditing ? (
           <TextInput
@@ -96,26 +123,31 @@ export default function Profile({ navigation }) {
         )}
       </View>
 
+      {/* Sección del menú de opciones */}
       <View style={styles.menuSection}>
+        {/* Opción Métodos de pago */}
         <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('PaymentMethods')}>
           <Ionicons name="card" size={24} color="#4A90E2" />
           <Text style={styles.menuText}>Métodos de pago</Text>
           <Ionicons name="chevron-forward" size={20} color="#999" />
         </TouchableOpacity>
 
+        {/* Opción Configuración */}
         <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Settings')}>
           <Ionicons name="settings" size={24} color="#4A90E2" />
           <Text style={styles.menuText}>Configuración</Text>
           <Ionicons name="chevron-forward" size={20} color="#999" />
         </TouchableOpacity>
 
+        {/* Opción Ayuda */}
         <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Help')}>
           <Ionicons name="help-circle" size={24} color="#4A90E2" />
           <Text style={styles.menuText}>Ayuda</Text>
           <Ionicons name="chevron-forward" size={20} color="#999" />
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.menuItem, styles.logoutItem]}>
+        {/* Opción Cerrar sesión */}
+        <TouchableOpacity style={[styles.menuItem, styles.logoutItem]} onPress={handleLogout}>
           <Ionicons name="log-out" size={24} color="#F44336" />
           <Text style={[styles.menuText, styles.logoutText]}>Cerrar sesión</Text>
         </TouchableOpacity>
@@ -124,6 +156,7 @@ export default function Profile({ navigation }) {
   );
 }
 
+// Hoja de estilos para el componente
 const styles = StyleSheet.create({
   container: {
     flex: 1,

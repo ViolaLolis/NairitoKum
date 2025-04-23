@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: '12345678',
   database: 'bocanegra_bd'
 });
 
@@ -43,6 +43,42 @@ app.post('/login', (req, res) => {
   );
 });
 
+// Agregar una nueva cita
+app.post('/appointments', (req, res) => {
+  const { mascota_id, fecha, hora, servicio } = req.body;
+  const sql = 'INSERT INTO citas (mascota_id, fecha, hora, servicio) VALUES (?, ?, ?, ?)';
+  db.query(sql, [mascota_id, fecha, hora, servicio], (err, result) => {
+      if (err) {
+          console.error('Error al agregar la cita:', err);
+          return res.status(500).json({ success: false, message: 'Error al agregar la cita', error: err.message });
+      }
+      res.status(201).json({ success: true, message: 'Cita agregada exitosamente', id: result.insertId });
+  });
+});
+// Obtener todas las citas con el nombre de la mascota
+app.get('/appointments', (req, res) => {
+  const sql = `
+      SELECT
+          citas.id,
+          citas.fecha,
+          citas.hora,
+          citas.servicio,
+          citas.estado,
+          mascotas.nombre AS nombre_mascota,
+          mascotas.especie AS especie_mascota,
+          mascotas.raza AS raza_mascota
+      FROM citas
+      INNER JOIN mascotas ON citas.mascota_id = mascotas.id
+      ORDER BY citas.fecha, citas.hora;
+  `;
+  db.query(sql, (err, results) => {
+      if (err) {
+          console.error('Error al obtener las citas:', err);
+          return res.status(500).json({ success: false, message: 'Error al obtener las citas', error: err.message });
+      }
+      res.json(results);
+  });
+});
 // 📝 Registro
 app.post('/register', (req, res) => {
   const { nombre, email, telefono, password } = req.body;
@@ -125,5 +161,5 @@ app.delete('/pets/:id', (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log('Servidor corriendo en http://192.168.1.7:3000');
+  console.log('Servidor corriendo en http://localhost:3000');
 });

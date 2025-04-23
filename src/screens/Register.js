@@ -8,7 +8,7 @@ export default function Register({ navigation }) {
   const [phone, setPhone] = useState('');
 
   const handleRegister = () => {
-    fetch('http://192.168.1.7:3000/register', {
+    fetch('http://localhost:3000/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

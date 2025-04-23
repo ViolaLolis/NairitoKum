@@ -9,7 +9,7 @@ export default function Pets({ navigation }) {
   const fetchPets = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://192.168.1.7:3000/pets');
+      const response = await fetch('http://localhost:3000/pets');
       const data = await response.json();
       setPets(data);
     } catch (error) {

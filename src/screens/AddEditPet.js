@@ -57,7 +57,7 @@ export default function AddEditPet({ route, navigation }) {
     console.log('🚀 Pet Data:', petData); // Añadimos un log para ver los datos antes de enviarlos
   
     try {
-      const response = await fetch('http://192.168.1.7:3000/pets', {
+      const response = await fetch('http://localhost:3000/pets', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
